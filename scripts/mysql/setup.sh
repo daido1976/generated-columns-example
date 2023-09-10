@@ -24,7 +24,11 @@ do
   done
   QUERY=${QUERY%?}  # Remove trailing comma
   docker compose exec mysql mysql -u root --password=root -D generated_columns_example -e "$QUERY"
-  echo "Inserted records up to $j into users table"
+
+  # 進捗の割合を計算して出力
+  PROGRESS_PERCENTAGE=$((j * 100 / RECORD_COUNT))
+  echo "Inserted records up to $j into users table (Progress: $PROGRESS_PERCENTAGE%)"
+
   # 経過時間を出力
   ELAPSED_TIME=$(($(date +%s) - START_TIME))
   echo "Elapsed time: $ELAPSED_TIME seconds"
