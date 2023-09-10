@@ -26,3 +26,13 @@ SELECT email FROM users WHERE email LIKE "%example.com" ORDER BY last_login_at L
 
 -- After
 SELECT email FROM users WHERE email_domain = "example.com" ORDER BY last_login_at LIMIT 2000;
+
+-- 0. update email domain for existing users
+UPDATE users
+JOIN (
+  SELECT SUBSTRING_INDEX(email, '@', -1) AS domain
+  FROM users
+  WHERE id = 1
+) AS derived
+SET email = CONCAT(SUBSTRING_INDEX(email, '@', 1), '@', derived.domain)
+WHERE id BETWEEN 1 AND 100000;
